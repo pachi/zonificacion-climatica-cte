@@ -30,6 +30,10 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
   - zonas climáticas de invierno (ZCI, una letra) y verano (ZCV, un número), a partir de SCI y SCV
   - zona climática ZC (letra de ZCI y número de ZCV)
     - [Documento de apoyo de climas](https://www.codigotecnico.org/pdf/Documentos/HE/20170202-DOC-DB-HE-0-Climas%20de%20referencia.pdf)
+    - Relación de Dorenbos y Pruitt (1974) para el cálculo de la insolación n/N = 2 · (R_g / R_a - 0.25) (http://ocw.upm.es/pluginfile.php/675/mod_label/intro/RADIACION-GLOBAL.pdf)
+    - R_g: Radiación solar sobre un plano horizontal (MJ/m².dia) (del TMY)
+    - R_a: Radiación solar diaria extraterrestre (MJ/m².dia): http://ocw.upm.es/pluginfile.php/675/mod_label/intro/RADIACION-SOLAR-EXTRATERRESTRE.pdf
+    - GD: Grados día. GD_Tb = Sum( ((Tb - Tah) / 24) si Tb > Tah, o 0 si Tb <= Tah).
 - Representación de resultados
   - Mapa ZCI
   - Mapa ZCV
