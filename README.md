@@ -1,24 +1,43 @@
 # zonificacion-climatica-cte
-Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación
 
-Esta zonificación climática está vinculado a las exigencias reglamentarias de eficiencia energética de los edificios pero, también, para cuantificar el bono social térmico, etc.
+## Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación
 
-El Código Técnico de la Edificación asigna una zona climática a localidad a partir de su capital de provincia y la altitud sobre el nivel del mar. Esa zona climática se obtiene a partir de dos indicadores, la severidad climática de invierno y la severidad climática de verano, que se codifican, respectivamente, mediante una letra y un número y se obtienen a partir de datos climáticos genéricos.
+El *Código Técnico de la Edificación (CTE)* permite asignar a cada localidad una zona climática, que se obtiene a partir de su capital de provincia y la altitud sobre el nivel del mar.
 
-El [Documento de apoyo de climas](https://www.codigotecnico.org/pdf/Documentos/HE/20170202-DOC-DB-HE-0-Climas%20de%20referencia.pdf) especifica cómo se obtienen esos indicadores.
+Las [tablas del Anejo B](https://www.codigotecnico.org/pdf/Documentos/HE/DccHE.pdf) del *Documento básico de Ahorro de Energía del CTE (CTE DB-HE)* recogen esta zonificación y se elaboraron a partir de datos climáticos correspondientes a las capitales de provincia, realizando interpolación geométrica y calculando dos indicadores, la severidad climática de invierno (SCI) y la severidad climática de verano (SCV). Dichas severidades se codifican como zonas climáticas mediante una letra (zona climática de invierno, ZCI) y un número (zona climática de verano, ZCV) que, combinadas, definen una zona climática (ZC).
 
-La [tabla del Anejo I del CTE DB-HE permite clasificar una localidad en función de la capital de provincia y su diferencia de altitud](https://www.codigotecnico.org/pdf/Documentos/HE/DccHE.pdf), para obtener un clima tipo (datos horarios de variables climáticas) que se obtuvo en su momento a partir de datos de capitales de provincia y una interpolación geométrica.
+Esta zonificación climática está vinculada a las exigencias reglamentarias de eficiencia energética de los edificios, especificadas en el *CTE DB-HE*, pero también se utilizan para cuantificar el bono social térmico, etc.
 
-Puesto que ahora tenemos datos más precisos para cualquier punto georeferenciado, se podrían tener resultados de mayor calidad.
+## Propuesta
 
-El objetivo sería:
+Puesto que ahora disponemos de datos de satélite más precisos y para cualquier punto georeferenciado, se plantea el ejercicio de obtener la zonificación climática a partir de esa información y hacer un análisis comparativo con la zonificación existente del CTE DB-HE.
 
-- Calcular los índices de severidad climática de verano e invierno.
-- La información de radiación y temperatura los sacaríamos del año meteorológico tipo (TMY) que obtenemos de la web PV-GIS del JRC (https://re.jrc.ec.europa.eu/pvg_tools/en/) usando su georeferencia (se puede sacar del INE) y la API de la web PVGIS.
-  - API: https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1 
-- Con los índices de severidad climática de verano y de invierno podemos generar unos mapas de resultados y diferencias.
-- También se podría hacer un análisis comparativo con las zonas que resultan de aplicar las tablas del Código Técnico de la Edificación (https://www.codigotecnico.org/pdf/Documentos/HE/DccHE.pdf).
-- Adicionalmente, se podría hacer un análisis de cómo se comparan las series temporales corrrespondientes a una zona climática concreta (con la misma severidad de verano e invierno) con los climas tipo para cada zona.
+Realizar la propuesta mediante criterios de ciencia reproducible.
 
+## Proceso de análisis
 
+- Obtención de datos:
+  - Latitud y longitud de municipios a partir del nomenclator oficial del Centro Nacional de Información Geográfica (CNIG):
+    - https://datos.gob.es/gl/catalogo/e00125901-spaignngbe
+    - http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=NGMEN
+  - Información climática (radiación y temperatura)
+    - Año meteorológico tipo (TMY):
+    - [PV-GIS (JRC)](https://re.jrc.ec.europa.eu/pvg_tools/en/)
+    - API para obtener TMY:
+      - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
+- Cálculo de indicadores
+  - índices de severidad climática de invierno (SCI) y verano (SCV)
+  - zonas climáticas de invierno (ZCI, una letra) y verano (ZCV, un número), a partir de SCI y SCV
+  - zona climática ZC (letra de ZCI y número de ZCV)
+    - [Documento de apoyo de climas](https://www.codigotecnico.org/pdf/Documentos/HE/20170202-DOC-DB-HE-0-Climas%20de%20referencia.pdf)
+- Representación de resultados
+  - Mapa ZCI
+  - Mapa ZCV
+  - Mapa de diferencias entre ZCI calculada y de las tablas CTE DB-HE
+  - Mapa de diferencias entre ZCV calculada y de las tablas CTE DB-HE
+
+## Herramientas
+
+- Python para el tratamiento previo de datos
+- R para la representación de resultados
 
