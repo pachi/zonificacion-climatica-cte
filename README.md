@@ -52,3 +52,44 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
 - Python para el tratamiento previo de datos
 - R para la representación de resultados
 
+## Información de los datos y el proceso
+
+### Datos de entrada
+
+- Descripción, cómo están organizados
+
+    - Datos de municipios y geolocalización
+        - Fuente: Nomenclator oficial del Centro Nacional de Información Geográfica (CNIG):
+            - https://datos.gob.es/gl/catalogo/e00125901-spaignngbe
+            - http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=NGMEN
+        - Licencia: Compatible CC-BY-4
+        - Tipo de documento: .csv (... Kb)
+        - Ruta: datos/ign/MUNICIPIOS.csv
+     
+    - Información climática
+        - Fuente: Joint Research Center (JRC)
+            - [PV-GIS (JRC)](https://re.jrc.ec.europa.eu/pvg_tools/en/)
+            - API para obtener TMY:
+              - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
+        - Licencia: ??
+        - Formato: Año meteorológico tipo (TMY)
+
+- Origen, cómo se descargan
+    - 
+### Software necesario
+- Nombre de los programas y versiones
+    - Python 3
+- Dependencias relevantes
+    - 
+### Pasos a ejecutar
+- Comandos concretos
+- Definición de la secuencia de tareas
+    - 1) Mostrar municipios
+    - 2) Selección del municipio
+    - 3) Descarga de los datos ('TMY_x.csv') con la API ... ('scrap_tmy.py')
+    - 4) Generación de los cálculos de los indicadores ('calc_indicators.py').
+    - 5) Generación de las representaciones gráficas ('visualizations.py'). 
+ 
+### Resultados
+- Descripción de los archivos finales
+- Descripción de los resultados y conclusiones
