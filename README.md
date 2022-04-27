@@ -75,7 +75,7 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
         - Formato: Año meteorológico tipo (TMY)
 
 - Origen, cómo se descargan
-    - 
+    
 ### Software necesario
 - Nombre de los programas y versiones
     - Python 3
