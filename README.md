@@ -34,6 +34,7 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
     - R_g: Radiación solar sobre un plano horizontal (MJ/m².dia) (del TMY)
     - R_a: Radiación solar diaria extraterrestre (MJ/m².dia):
       - https://www.fao.org/3/x0490e/x0490e07.htm (ver Extraterrestrial radiation for daily periods (Ra))
+      - https://github.com/pachi/soljs/blob/master/src/soljs.js
       - http://ocw.upm.es/pluginfile.php/675/mod_label/intro/RADIACION-SOLAR-EXTRATERRESTRE.pdf
     - GD: Grados día. GD_Tb = Sum( ((Tb - Tah) / 24) si Tb > Tah, o 0 si Tb <= Tah). https://fornieles.es/gestion-energetica/que-son-los-grados-dia/
 - Representación de resultados
