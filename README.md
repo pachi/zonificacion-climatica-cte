@@ -32,7 +32,9 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
     - [Documento de apoyo de climas](https://www.codigotecnico.org/pdf/Documentos/HE/20170202-DOC-DB-HE-0-Climas%20de%20referencia.pdf)
     - Relación de Dorenbos y Pruitt (1974) para el cálculo de la insolación n/N = 2 · (R_g / R_a - 0.25) (http://ocw.upm.es/pluginfile.php/675/mod_label/intro/RADIACION-GLOBAL.pdf)
     - R_g: Radiación solar sobre un plano horizontal (MJ/m².dia) (del TMY)
-    - R_a: Radiación solar diaria extraterrestre (MJ/m².dia): http://ocw.upm.es/pluginfile.php/675/mod_label/intro/RADIACION-SOLAR-EXTRATERRESTRE.pdf
+    - R_a: Radiación solar diaria extraterrestre (MJ/m².dia):
+      - https://www.fao.org/3/x0490e/x0490e07.htm (ver Extraterrestrial radiation for daily periods (Ra))
+      - http://ocw.upm.es/pluginfile.php/675/mod_label/intro/RADIACION-SOLAR-EXTRATERRESTRE.pdf
     - GD: Grados día. GD_Tb = Sum( ((Tb - Tah) / 24) si Tb > Tah, o 0 si Tb <= Tah). https://fornieles.es/gestion-energetica/que-son-los-grados-dia/
 - Representación de resultados
   - Mapa ZCI
