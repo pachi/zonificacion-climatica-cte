@@ -25,6 +25,7 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
     - [PV-GIS (JRC)](https://re.jrc.ec.europa.eu/pvg_tools/en/)
     - API para obtener TMY:
       - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
+      - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=json&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
 - Cálculo de indicadores
   - índices de severidad climática de invierno (SCI) y verano (SCV)
   - zonas climáticas de invierno (ZCI, una letra) y verano (ZCV, un número), a partir de SCI y SCV
