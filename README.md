@@ -86,7 +86,7 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
 - Definición de la secuencia de tareas
     - 1) Mostrar municipios
     - 2) Selección del municipio
-    - 3) Descarga de los datos ('TMY_x.csv') con la API ... ('scrap_tmy.py')
+    - 3) Descarga de los datos ('TMY_x.csv') con la API ... ('download_TMY.py')
     - 4) Generación de los cálculos de los indicadores ('calc_indicators.py').
     - 5) Generación de las representaciones gráficas ('visualizations.py'). 
  
