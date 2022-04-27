@@ -1,3 +1,10 @@
+"""Llamadas a la API de PVGIS para obtener datos climáticos en formato TMY.
+
+Documentación de la API en:
+
+https://joint-research-centre.ec.europa.eu/pvgis-photovoltaic-geographical-information-system/getting-started-pvgis/api-non-interactive-service_en
+"""
+
 import requests
 import time
 
@@ -11,4 +18,5 @@ for (i, url) in enumerate(urls):
     data = requests.get(url)
     with open(local_file, 'wb') as file:
         file.write(data.content)
-    time.sleep(1) # para para no abusar del servidor
+    # La API limita a 1/30s por llamada. Paramos 1/20s en cada llamada para no superar el límite
+    time.sleep(0.05)

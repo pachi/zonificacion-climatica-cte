@@ -67,6 +67,7 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
     - Fuente: Joint Research Center (JRC)
       - [PV-GIS (JRC)](https://re.jrc.ec.europa.eu/pvg_tools/en/)
       - API para obtener TMY:
+        - [API Support page](https://joint-research-centre.ec.europa.eu/pvgis-photovoltaic-geographical-information-system/getting-started-pvgis/api-non-interactive-service_en)
         - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
     - Licencia: ??
     - Formato: Año meteorológico tipo (TMY)
