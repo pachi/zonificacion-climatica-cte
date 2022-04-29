@@ -260,18 +260,17 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
                              'SP': float
                          }
                          )
-        # Grados día en base 20
-        # \sum {{T_b - T_{ah}} \over 24} \cdot \left\lfloor T_b > T_{ah} \right\rfloor
-        gd_tot = ((20.0 - df['T2m']) / 24.0 *
-                  (20.0 > df['T2m']).astype(int))
-        gd = round(gd_tot.sum(), 1)
 
-        # Severidad y zona climática de invierno
+        # Severidad y zona climática de invierno ========
         # Se calcula con indicadores de los meses de octubre a mayo
         # (dias 1 a 150 y de 274 a 365, horas 1 a 3600 y de 6552 a 8760)
-
+        # Grados día de invierno en base 20  (grados sobre 20 en cada día / 24)
+        # \sum {{T_b - T_{ah}} \over 24} \cdot \left\lfloor T_b > T_{ah} \right\rfloor
+        gd_inv_tot = ((20.0 - df['T2m']) / 24.0 *
+                      (20.0 > df['T2m']).astype(int))
         # GD_inv: grados día base 20, para los meses de octubre a mayo
-        gd_inv = round(gd_tot[1:3600].sum() + gd_tot[6552:8760].sum(), 1)
+        gd_inv = round(gd_inv_tot[1:3600].sum() +
+                       gd_inv_tot[6552:8760].sum(), 1)
         # n (duration of sunshine): horas con radiación directa (beam solar irradiance) > 120 W/m² (World Meteorological Organization)
         n = float((df['Gb(n)'][1:3600] > 120.0).astype(int).sum() +
                   (df['Gb(n)'][6552:8760] > 120.0).astype(int).sum())
@@ -284,22 +283,27 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
                     gd_inv * gd_inv - 7.325e-2 * n_N * n_N - 1.137e-1, 2)
         zci = get_zci(sci)
 
-        # Severidad y zona climática de verano
-        # GD_ver: grados día base 20, para los meses de junio a septiembre
+        # Severidad y zona climática de verano ========
         # (día 151 a día 273, horas de 3601 a 6551)
-        gd_ver = round(gd_tot[3601:6551].sum(), 1)
+        # Grados día de verano en base 20 (grados sobre 20 en cada día / 24)
+        # \sum {{T_{ah} - T_b} \over 24} \cdot \left\lfloor T_b < T_{ah} \right\rfloor
+        gd_ver_tot = ((df['T2m'] - 20.0) / 24.0 *
+                      (20.0 < df['T2m']).astype(int))
+
+        # GD_ver: grados día base 20, para los meses de junio a septiembre
+        gd_ver = round(gd_ver_tot[3601:6551].sum(), 1)
 
         scv = round(2.990e-3 * gd_ver - 1.1597e-7 *
                     gd_ver * gd_ver - 1.713e-1, 2)
         zcv = get_zcv(scv)
 
         if TEST_MODE:
-            print("\tGD: ", gd, ", GD_inv: ", gd_inv, ", GD_ver: ", gd_ver)
+            print("\tGD_inv: ", gd_inv, ", GD_ver: ", gd_ver)
             print("\tn: ", n, ", N: ", N, ", n/N: ", n_N)
             print("\tSCI: ", sci, " SCV: ", scv)
             print("\tZCI: ", zci, " ZCV: ", zcv)
 
-    return {'COD_INE': cod, 'GD': gd, 'GD_I': gd_inv, 'GD_V': gd_ver, 'n_N': n_N, 'SCI': sci, 'SCV': scv, 'ZCI_TMY': zci, 'ZCV_TMY': zcv}
+    return {'COD_INE': cod, 'GD_I': gd_inv, 'GD_V': gd_ver, 'n_N': n_N, 'SCI': sci, 'SCV': scv, 'ZCI_TMY': zci, 'ZCV_TMY': zcv}
 
 
 TEST_MODE = True
