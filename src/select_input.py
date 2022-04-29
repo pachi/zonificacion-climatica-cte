@@ -48,7 +48,7 @@ if __name__ == "__main__":
                          'LONGITUD_ETRS89', 'LATITUD_ETRS89', 'ALTITUD']
                      )
 
-    df['ARCHIVO_TMY'] = df['COD_INE'].apply(lambda x: '{}.tmy'.format(x))
+    df['ARCHIVO_TMY'] = df[['COD_INE', 'NOMBRE_ACTUAL']].apply(lambda x: '{}_{}.csv'.format(x[0], x[1]), axis=1)
 
     df.to_csv("../data/output/Municipios.csv", index=False)
     print("Datos de {} municipios cargados.".format(len(df)))
