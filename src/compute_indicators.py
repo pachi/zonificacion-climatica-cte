@@ -6,30 +6,35 @@ Para cada municipio, lee el archivo `data/output/tmy/$[COD_INE}.tmy` y calcula:
 
 - Indicadores obtenidos a partir de datos de los archivos climáticos TMY:
 
-    - GD
-    - n_N
-    - SCI
-    - SCV
-    - ZCI_TMY
-    - ZCV_TMY
+    - GD: Grados día en base 20 para todo el año
+    - GD_I: grados día en base 20 para los meses de octubre a mayo
+    - GD_V: grados día en base 20 para los meses de junio a septiembre
+    - n_N: horas de sol / horas máximas de sol para los meses de octubre a mayo
+    - SCI: severidad climática de invierno
+    - SCV: severidad climática de verano
+    - ZCI_TMY: zona climática de invierno (a, A, B, C, D, E) obtenida de datos TMY
+    - ZCV_TMY: zona climática de verano (1, 2, 3, 4) obtenida de datos TMY
 
 - Indicadores obtenidos a partir del CTE DB-HE:
 
-    - ZCI_CTE_2019
-    - ZCV_CTE_2019
+    - ZCI_CTE_2019: zona climática de invierno (a, A, B, C, D, E) obtenida de datos CTE DB-HE 2019
+    - ZCV_CTE_2019: zona climática de verano (1, 2, 3, 4) obtenida de datos CTE DB-HE 2019
 
 - Indicadores resultantes de la comparación entre los anteriores como
   diferencia en niveles de ZC entre TMY y CTE:
 
-    - ZCI_DIFF
-    - ZCV_DIFF
+    - ZCI_DIFF: diferencia de niveles de ZCI entre valores CTE DB-HE 2019 y TMY
+    - ZCV_DIFF: diferencia de niveles de ZCV entre valores CTE DB-HE 2019 y TMY
 
 Genera un archivo que incluye, además de las columnas del archivo de municipios
 de entrada, los anteriores indicadores y lo guarda en `data/output/Results.csv`.
 """
 
-import pandas as pd
+import math
 import multiprocessing as mp
+
+import numpy as np
+import pandas as pd
 
 # Tabla de altitudes del CTE HE 2019
 # provincia, capital de provincia, altitud de referencia, zc de referencia y rangos de altitud
@@ -161,19 +166,143 @@ ZCI_LEVELS = {"a": 1, "A": 2, "B": 3, "C": 4, "D": 5, "E": 6}
 
 
 def zci_level(zci):
-    """Devuelve nivel numérico de zona climática de invierno, para poder hacer comparaciones"""
+    """Nivel numérico de zona climática de invierno, para poder hacer comparaciones"""
     return ZCI_LEVELS[zci]
+
+
+def get_zci(sci):
+    """Zona climática de invierno a partir de severidad climática de invierno"""
+    if sci <= 0.0:
+        return "a"
+    elif sci <= 0.23:
+        return "A"
+    elif sci <= 0.5:
+        return "B"
+    elif sci <= 0.93:
+        return "C"
+    elif sci <= 1.51:
+        return "D"
+    else:
+        return "E"
+
+
+def get_zcv(scv):
+    """Zona climática de verano a partir de severidad climática de verano"""
+    if scv <= 0.5:
+        return 1
+    elif scv <= 0.83:
+        return 2
+    elif scv <= 1.38:
+        return 3
+    else:
+        return 4
+
+
+def winter_total_duration_of_days(latitude):
+    """Calcula total para el periodo de invierno de la duración del día, en base a la latitud (en grados)
+
+        El periodo de invierno dura de octubre a mayo (dias 1 a 150 y de 274 a 365, horas 1 a 3600 y de 6552 a 8760)
+
+        N = 2/15. cos^-1(-tan(lat)tan(delta))
+        delta = declinación (grados) = 23.45 · sin(360/365 · (284 + día_del_año)))
+        días_del_año = [1, 365]
+    """
+    lat = math.radians(latitude)
+
+    def declination(nday):
+        return 23.45 * np.sin(np.radians(360.0 / 365.0 * (284.0 + nday.astype(float))))
+
+    def day_duration_N(nday):
+        return np.degrees(2.0 / 15.0 * np.arccos(-np.tan(lat) * np.tan(np.radians(declination(nday)))))
+
+    # Duración de los dias 1 a 150 y de 274 a 365
+    N = day_duration_N(np.arange(1.0, 151.0, 1.0)).sum() + \
+        day_duration_N(np.arange(274.0, 366.0, 1.0)).sum()
+    print("N: ", N)
+
+    return N
 
 
 def tmy_indicators(cod, long, lat, alt, tmy_filename):
     """Calcula indicadores a partir de datos de archivo TMY"""
-    # TODO: Calcular indicadores a partir de archivos TMY
-    # TODO: leyendo datos de ../data/output/tmy
+    if TEST_MODE and tmy_filename not in TEST_FILES:
+        return {'COD_INE': cod, 'GD': 0.0, 'GD_I': 0.0, 'GD_V': 0.0, 'n_N': 0.0, 'SCI': 0.0, 'SCV': 0.0, 'ZCI_TMY': 'A', 'ZCV_TMY': 1}
 
-    return {'COD_INE': cod, 'GD': 0, 'n_N': 0.0, 'SCI': 0.0, 'SCV': 0.0, 'ZCI_TMY': 'A', 'ZCV_TMY': 1}
+    filename = '../data/output/tmy/{}'.format(tmy_filename)
+    with open(filename, "r") as tmy_file:
+        f_lat = float(tmy_file.readline().split(':')[1].strip())
+        f_long = float(tmy_file.readline().split(':')[1].strip())
+        f_elev = float(tmy_file.readline().split(':')[1].strip())
+        if f_lat != round(lat, 3) or f_long != round(long, 3) or f_elev != round(alt, 1):
+            print("AVISO: '{}' diferencias en (lat, long, alt) de archivo ({}, {}, {}) y del nomenclator ({}, {}, {})".format(
+                tmy_filename, f_lat, f_long, f_elev, round(lat, 3), round(long, 3), round(alt, 1)))
+        df = pd.read_csv(tmy_file,
+                         sep=',', decimal='.',
+                         skiprows=13,
+                         nrows=8760,
+                         dtype={
+                             # No interpretamos columna de tiempo
+                             'time(UTC)': str,
+                             'T2m': float,
+                             'RH': float,
+                             'G(h)': float,
+                             'Gb(n)': float,
+                             'Gd(h)': float,
+                             'IR(h)': float,
+                             'WS10m': float,
+                             'WD10m': float,
+                             'SP': float
+                         }
+                         )
+        # Grados día en base 20
+        # \sum {{T_b - T_{ah}} \over 24} \cdot \left\lfloor T_b > T_{ah} \right\rfloor
+        gd_tot = ((20.0 - df['T2m']) / 24.0 *
+                  (20.0 > df['T2m']).astype(int))
+        gd = round(gd_tot.sum(), 1)
 
+        # Severidad y zona climática de invierno
+        # Se calcula con indicadores de los meses de octubre a mayo
+        # (dias 1 a 150 y de 274 a 365, horas 1 a 3600 y de 6552 a 8760)
+
+        # GD_inv: grados día base 20, para los meses de octubre a mayo
+        gd_inv = round(gd_tot[1:3600].sum() + gd_tot[6552:8760].sum(), 1)
+        # n (duration of sunshine): horas con radiación directa (beam solar irradiance) > 120 W/m² (World Meteorological Organization)
+        n = (df['Gb(n)'][1:3600] > 120.0).astype(int).sum() + \
+            (df['Gb(n)'][6552:8760] > 120.0).astype(int).sum()
+        # N (número teórico máximo de horas de luz) en invierno, de octubre a mayo (ambos incluidos):
+        N = winter_total_duration_of_days(lat)
+        # n/N: Horas de sol / duración del día, en los meses de octubre a mayo
+        n_N = round(n/N, 3)
+
+        sci = round(3.564e-4 * gd_inv - 4.043e-1 * n_N + 8.394e-8 *
+                    gd_inv * gd_inv - 7.325e-2 * n_N * n_N - 1.137e-1, 2)
+        zci = get_zci(sci)
+
+        # Severidad y zona climática de verano
+        # GD_ver: grados día base 20, para los meses de junio a septiembre
+        # (día 151 a día 273, horas de 3601 a 6551)
+        gd_ver = round(gd_tot[3601:6551].sum(), 1)
+
+        scv = round(2.990e-3 * gd_ver - 1.1597e-7 *
+                    gd_ver * gd_ver - 1.713e-1, 2)
+        zcv = get_zcv(scv)
+
+        if TEST_MODE:
+            print("GD: ", gd, ", GD_inv: ", gd_inv, ", GD_ver: ", gd_ver)
+            print("n: ", n)
+            print("n/N: ", n_N)
+            print("SCI: ", sci, " SCV: ", scv, " ZCI: ", zci, " ZCV: ", zcv)
+
+    return {'COD_INE': cod, 'GD': gd, 'GD_I': gd_inv, 'GD_V': gd_ver, 'n_N': n_N, 'SCI': sci, 'SCV': scv, 'ZCI_TMY': zci, 'ZCV_TMY': zcv}
+
+
+TEST_MODE = True
+TEST_FILES = [
+    '01001000000_Alegría-Dulantzi.csv',
+]
 
 if __name__ == "__main__":
+
     print("Cargando datos de municipios...")
     df = pd.read_csv('../data/output/Municipios.csv',
                      dtype={'COD_INE': str,
@@ -202,14 +331,14 @@ if __name__ == "__main__":
         values = [(data['COD_INE'], data['LONGITUD_ETRS89'], data['LATITUD_ETRS89'],
                    data['ALTITUD'], data['ARCHIVO_TMY']) for data in df.to_dict('records')]
         indicators = pool.starmap(tmy_indicators, values, chunksize=100)
-        indicators_df = pd.DataFrame(indicators)
-        df = df.join(indicators_df.set_index('COD_INE'), on='COD_INE')
+        indicators_df = pd.DataFrame(indicators).set_index('COD_INE')
+        df = df.join(indicators_df, on='COD_INE')
 
     # Calcula diferencia de resultados entre indicadores CTE y TMY
     print("Calculando diferencias...")
     df['ZCI_DIFF'] = df.apply(lambda x: zci_level(
-        x['ZCI_CTE_2019']), 1) - df.apply(lambda x: zci_level(x['ZCI_TMY']), 1)
-    df['ZCV_DIFF'] = df['ZCV_CTE_2019'] - df['ZCV_TMY']
+        x['ZCI_TMY']) - zci_level(x['ZCI_CTE_2019']), 1)
+    df['ZCV_DIFF'] = df['ZCV_TMY'] - df['ZCV_CTE_2019']
 
     df.to_csv("../data/output/Results.csv", index=False)
     print("Indicadores de {} municipios calculados".format(len(df)))
