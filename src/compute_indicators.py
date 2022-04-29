@@ -28,6 +28,12 @@ Para cada municipio, lee el archivo `data/output/tmy/$[COD_INE}.tmy` y calcula:
 
 Genera un archivo que incluye, además de las columnas del archivo de municipios
 de entrada, los anteriores indicadores y lo guarda en `data/output/Results.csv`.
+
+Cálculos en base a:
+
+- [CTE DB-HE - Documento de climas de referencia](https://www.codigotecnico.org/pdf/Documentos/HE/20170202-DOC-DB-HE-0-Climas%20de%20referencia.pdf)
+- S.A. Kalogirou, Solar energy engineering: processes and systems (2nd ed.), Elsevier Inc. (2014)
+- Archivos TMY (.csv) obtenidos de [PV-GIS](https://re.jrc.ec.europa.eu/pvg_tools/en/)
 """
 
 import math
@@ -267,12 +273,12 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
         # GD_inv: grados día base 20, para los meses de octubre a mayo
         gd_inv = round(gd_tot[1:3600].sum() + gd_tot[6552:8760].sum(), 1)
         # n (duration of sunshine): horas con radiación directa (beam solar irradiance) > 120 W/m² (World Meteorological Organization)
-        n = (df['Gb(n)'][1:3600] > 120.0).astype(int).sum() + \
-            (df['Gb(n)'][6552:8760] > 120.0).astype(int).sum()
+        n = float((df['Gb(n)'][1:3600] > 120.0).astype(int).sum() +
+                  (df['Gb(n)'][6552:8760] > 120.0).astype(int).sum())
         # N (número teórico máximo de horas de luz) en invierno, de octubre a mayo (ambos incluidos):
-        N = winter_total_duration_of_days(lat)
+        N = round(winter_total_duration_of_days(lat), 1)
         # n/N: Horas de sol / duración del día, en los meses de octubre a mayo
-        n_N = round(n/N, 3)
+        n_N = round(float(n)/float(N), 3)
 
         sci = round(3.564e-4 * gd_inv - 4.043e-1 * n_N + 8.394e-8 *
                     gd_inv * gd_inv - 7.325e-2 * n_N * n_N - 1.137e-1, 2)
@@ -288,10 +294,10 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
         zcv = get_zcv(scv)
 
         if TEST_MODE:
-            print("GD: ", gd, ", GD_inv: ", gd_inv, ", GD_ver: ", gd_ver)
-            print("n: ", n)
-            print("n/N: ", n_N)
-            print("SCI: ", sci, " SCV: ", scv, " ZCI: ", zci, " ZCV: ", zcv)
+            print("\tGD: ", gd, ", GD_inv: ", gd_inv, ", GD_ver: ", gd_ver)
+            print("\tn: ", n, ", N: ", N, ", n/N: ", n_N)
+            print("\tSCI: ", sci, " SCV: ", scv)
+            print("\tZCI: ", zci, " ZCV: ", zcv)
 
     return {'COD_INE': cod, 'GD': gd, 'GD_I': gd_inv, 'GD_V': gd_ver, 'n_N': n_N, 'SCI': sci, 'SCV': scv, 'ZCI_TMY': zci, 'ZCV_TMY': zcv}
 
