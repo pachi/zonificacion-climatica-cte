@@ -88,7 +88,7 @@ def main():
             print()
             print("Conectando con '{}'". format(url))
             print()
-            print("Descargando información en '{}'".format(ine_cod, out_file))
+            print("Descargando información en '{}'".format(out_file))
             print()
             f.write(data.content)
     # Si ya está descargado, informamos
