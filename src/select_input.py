@@ -16,15 +16,22 @@ datos `data/output/Municipios.csv` que contendría:
 - ARCHIVO_TMY
 """
 
+from tabnanny import verbose
 import pandas as pd
+import os
+
+#from download_TMY import MUNICIPIOS_FILE
+
+MUNICIPIOS_FILE = "data/ign/MUNICIPIOS.csv"
+MUNICIPIOS_FILE_FORMATTED = "data/output/Municipios.csv"
 
 if __name__ == "__main__":
     print("Cargando datos de municipios...")
-    df = pd.read_csv('../data/ign/MUNICIPIOS.csv',
-                     encoding='latin1',
-                     sep=';',
-                     decimal=',',
-                     dtype={'COD_INE': str,
+    df = pd.read_csv(MUNICIPIOS_FILE,
+                        encoding='latin1',
+                        sep=';',
+                        decimal=',',
+                        dtype={'COD_INE': str,
                             'ID_REL': str,
                             'COD_GEO': str,
                             'COD_PROV': str,
@@ -43,12 +50,16 @@ if __name__ == "__main__":
                             'ALTITUD': float,
                             'ORIGENALTITUD': str
                             },
-                     usecols=[
-                         'COD_INE', 'COD_PROV', 'PROVINCIA', 'NOMBRE_ACTUAL',
-                         'LONGITUD_ETRS89', 'LATITUD_ETRS89', 'ALTITUD']
-                     )
+                        usecols=[
+                            'COD_INE', 'COD_PROV', 'PROVINCIA', 'NOMBRE_ACTUAL',
+                            'LONGITUD_ETRS89', 'LATITUD_ETRS89', 'ALTITUD']
+                        )
 
-    df['ARCHIVO_TMY'] = df[['COD_INE', 'NOMBRE_ACTUAL']].apply(lambda x: '{}_{}.csv'.format(x[0], x[1]), axis=1)
+    df['ARCHIVO_TMY'] = df[['COD_INE', 'NOMBRE_ACTUAL']].\
+        apply(lambda x: '{}_{}.csv'.format(x[0], x[1]), axis=1)
 
-    df.to_csv("../data/output/Municipios.csv", index=False)
+    if not os.path.isdir('data/output'):
+        os.makedirs('data/output')
+
+    df.to_csv(MUNICIPIOS_FILE_FORMATTED, index=False, encoding='utf-8')
     print("Datos de {} municipios cargados.".format(len(df)))
