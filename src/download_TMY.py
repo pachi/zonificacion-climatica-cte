@@ -16,24 +16,7 @@ import os
 from select_input import MUNICIPIOS_FILE_FORMATTED
 
 DIR_TMY = "data/output/tmy/"
-TIME_SLEEP = 0.05 
-
-
-def select_lon_lat_from_ine_cod(ine_cod, df_municipios): # no lo usamos
-    """
-    Devuelve la información de latitud y longitud del municipio al que hace referencia
-    el código INE
-    Args:
-        ine_cod (int)   Código INE del municipio
-        df_municipios (pd.Dataframe)    Df con la información relevante sobre los municipios
-    Return:
-        lat (float)  latitud ETRS89
-        lon (float)  longitud ETRS89    
-    """
-    data = df_municipios.loc[df_municipios['COD_INE'] == ine_cod, 
-                ['LONGITUD_ETRS89', 'LATITUD_ETRS89']].values[0]
-    lon, lat = data
-    return lon, lat
+TIME_SLEEP = 0.05 # Tiempo de espera entre llamadas a la API > 1/30s
 
 def write_url(lat, lon):
     """
