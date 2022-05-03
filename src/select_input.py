@@ -55,8 +55,9 @@ if __name__ == "__main__":
                             'LONGITUD_ETRS89', 'LATITUD_ETRS89', 'ALTITUD']
                         )
 
+    # Sustituimos los nombres con / para generar un nombre de arcivo válido
     df['ARCHIVO_TMY'] = df[['COD_INE', 'NOMBRE_ACTUAL']].\
-        apply(lambda x: '{}_{}.csv'.format(x[0], x[1]), axis=1)
+        apply(lambda x: '{}_{}.csv'.format(x[0], x[1].replace("/", "__")), axis=1)
 
     if not os.path.isdir('data/output'):
         os.makedirs('data/output')
