@@ -44,7 +44,7 @@ import pandas as pd
 
 # Tabla de altitudes del CTE HE 2019
 # provincia, capital de provincia, altitud de referencia, zc de referencia y rangos de altitud
-provincias = [
+TABLA_HE2019 = [
     {
         "prov": "Albacete",
         "capital": "Albacete",
@@ -448,8 +448,8 @@ provincias = [
 ]
 
 # Índices para búsquedas
-cap_index = {v["capital"]: v for v in provincias}
-prov_index = {v["prov"]: v for v in provincias}
+cap_index = {v["capital"]: v for v in TABLA_HE2019}
+prov_index = {v["prov"]: v for v in TABLA_HE2019}
 
 
 def findzc(alt, rangoslist):
