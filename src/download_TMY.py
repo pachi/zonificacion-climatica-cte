@@ -38,7 +38,7 @@ def write_tmy_file(lon, lat, tmy_file_name):
     3. Descarga la información en el fichero
     """
 
-    if not os.path.isfile(tmy_file_name): # tmy_file_name not in os.listdir(DIR_TMY):
+    if not os.path.isfile(DIR_TMY + tmy_file_name): # tmy_file_name not in os.listdir(DIR_TMY):
         url = write_url(lat, lon)
         data = requests.get(url)
         with open(DIR_TMY + tmy_file_name, 'wb') as f:
