@@ -49,16 +49,12 @@ def write_url(lat, lon):
 
 def write_tmy_file(lon, lat, tmy_file_name):
     """
-    0. Comprueba que el nombre del fichero no contenga "/", y si lo tiene lo
-        sustituye por "__" para que no cause problema de rutas
     1. Comprueba que el fichero tmy especificado como parámetro no esté ya en 
         el directorio ${DIR_TMY}
     2. Escribe la url de consulta
     3. Descarga la información en el fichero
     """
 
-    if "/" in tmy_file_name:
-        tmy_file_name = tmy_file_name.replace("/", "__")
     if not os.path.isfile(tmy_file_name): # tmy_file_name not in os.listdir(DIR_TMY):
         url = write_url(lat, lon)
         data = requests.get(url)
