@@ -16,7 +16,7 @@ import os
 from select_input import MUNICIPIOS_FILE_FORMATTED
 
 DIR_TMY = "data/output/tmy/"
-TIME_SLEEP = 0.05 # Tiempo de espera entre llamadas a la API > 1/30s
+TIME_SLEEP = 1.0 / 30.0 # Tiempo de espera entre llamadas a la API > 1/30s
 
 def write_url(lat, lon):
     """
@@ -40,7 +40,7 @@ def write_tmy_file(lon, lat, tmy_file_name):
 
     if not os.path.isfile(DIR_TMY + tmy_file_name): # tmy_file_name not in os.listdir(DIR_TMY):
         url = write_url(lat, lon)
-        data = requests.get(url)
+        data = requests.get(url, timeout=3)
         with open(DIR_TMY + tmy_file_name, 'wb') as f:
                 print()
                 print("Conectando con '{}' ...". format(url))
