@@ -14,6 +14,78 @@ Puesto que ahora disponemos de datos de satélite más precisos y para cualquier
 
 Realizar la propuesta mediante criterios de ciencia reproducible.
 
+## Herramientas
+
+- Python para el tratamiento previo de datos
+
+## Información de los datos y el proceso
+
+### Fuentes de datos
+
+Municipios y geolocalizción:
+
+- Fuente: Nomenclator oficial del Centro Nacional de Información Geográfica (CNIG):
+  - https://datos.gob.es/gl/catalogo/e00125901-spaignngbe
+  - http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=NGMEN
+- Licencia: Compatible CC BY 4.0
+- Formato: archivo de datos separados por comas .csv
+- Ruta en el repositorio: `datos/ign/MUNICIPIOS.csv`
+
+Información climática
+
+- Fuente: Joint Research Center (JRC)
+  - [PV-GIS (JRC)](https://re.jrc.ec.europa.eu/pvg_tools/en/)
+  - Descarga a través de API para obtener TMY:
+    - [API Support page](https://joint-research-centre.ec.europa.eu/pvgis-photovoltaic-geographical-information-system/getting-started-pvgis/api-non-interactive-service_en)
+    - Estructura de URL: `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
+- Licencia: CC BY 4.0 (https://ec.europa.eu/info/legal-notice_en)
+- Formato: Año meteorológico tipo (TMY) en formato .csv
+- Ruta de descarga en el repositorio: `datos/output/tmy
+
+### Software necesario
+
+Programas necesarios y versiones:
+
+- `Python 3`
+
+Dependencias relevantes de Python:
+
+- `pandas`
+- `requests`
+
+### Pasos a ejecutar
+
+- Definición de la secuencia de tareas
+
+  1. Generación de los datos para la descarga de archivos climáticos:
+
+     `python3 src/select_input.py`
+
+  2. Descarga de archivos climáticos (8130)
+
+     `python3 src/download_TMY.py`
+
+  3. Cálculo de indicadores
+
+     `python3 src/compute_indicators.py`
+
+  4. Representación gráfica
+
+     `python3 src/plot_results.py`
+
+### Resultados
+
+- Archivo con datos de municipios:
+  - `data/output/Municipios.csv`
+- Archivos climáticos:
+  - `data/output/tmy/*.csv`
+- Archivo de datos de zonificación:
+  - `data/output/Results.csv`
+- Gráficas:
+  - `data/output/plots/*.png`
+- Descripción de los resultados y conclusiones
+  - `...TODO`
+
 ## Proceso de análisis
 
 - Obtención de datos:
@@ -37,62 +109,8 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
     - GD: Grados día (cálculo de datos horarios):
       - <img src="https://render.githubusercontent.com/render/math?math=GD_{T_b} = \sum {{T_b - T_{ah}} \over 24} \cdot \left\lfloor T_b > T_{ah} \right\rfloor">
         <!-- GD_Tb = Sum( ((Tb - Tah) / 24) si Tb > Tah, o 0 si Tb <= Tah). -->
-      - https://fornieles.es/gestion-energetica/que-son-los-grados-dia/
 - Representación de resultados
   - Mapa ZCI
   - Mapa ZCV
   - Mapa de diferencias entre ZCI calculada y de las tablas CTE DB-HE
   - Mapa de diferencias entre ZCV calculada y de las tablas CTE DB-HE
-
-## Herramientas
-
-- Python para el tratamiento previo de datos
-- R para la representación de resultados
-
-## Información de los datos y el proceso
-
-### Datos de entrada
-
-- Descripción, cómo están organizados
-
-  - Datos de municipios y geolocalización
-
-    - Fuente: Nomenclator oficial del Centro Nacional de Información Geográfica (CNIG):
-      - https://datos.gob.es/gl/catalogo/e00125901-spaignngbe
-      - http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=NGMEN
-    - Licencia: Compatible CC BY 4.0
-    - Tipo de documento: .csv (... Kb)
-    - Ruta: datos/ign/MUNICIPIOS.csv
-
-  - Información climática
-    - Fuente: Joint Research Center (JRC)
-      - [PV-GIS (JRC)](https://re.jrc.ec.europa.eu/pvg_tools/en/)
-      - API para obtener TMY:
-        - [API Support page](https://joint-research-centre.ec.europa.eu/pvgis-photovoltaic-geographical-information-system/getting-started-pvgis/api-non-interactive-service_en)
-        - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
-    - Licencia: CC BY 4.0 (https://ec.europa.eu/info/legal-notice_en)
-    - Formato: Año meteorológico tipo (TMY)
-
-- Origen, cómo se descargan
-
-### Software necesario
-
-- Nombre de los programas y versiones
-  - Python 3
-- Dependencias relevantes
-  -
-
-### Pasos a ejecutar
-
-- Comandos concretos
-- Definición de la secuencia de tareas
-  - 1. Mostrar municipios
-  - 2. Selección del municipio
-  - 3. Descarga de los datos ('TMY_x.csv') con la API ... ('download_TMY.py')
-  - 4. Generación de los cálculos de los indicadores ('calc_indicators.py').
-  - 5. Generación de las representaciones gráficas ('visualizations.py').
-
-### Resultados
-
-- Descripción de los archivos finales
-- Descripción de los resultados y conclusiones
