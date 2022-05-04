@@ -1,4 +1,4 @@
-configfile: "config.yaml"
+conda: "environment.yaml"
 
 rule all:
     input: "data/output/plots/histo.png"
