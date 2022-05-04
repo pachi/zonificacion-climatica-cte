@@ -10,7 +10,7 @@ rule plot:
 
 rule select_input:
     input:
-        "data/ign/source/MUNICIPIOS.csv"
+        "data/ign/MUNICIPIOS.csv"
     output:
         "data/output/Municipios.csv"
     script:
