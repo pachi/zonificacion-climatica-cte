@@ -8,5 +8,5 @@ dependencies:
   - pygraphviz
   - numpy == 1.19.5
   - pandas == 1.2.4
-  - request == 2.25.1
+  - requests == 2.25.1
   #- multiprocessing
