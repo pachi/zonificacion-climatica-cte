@@ -544,7 +544,7 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
             "ZCV_TMY": 1,
         }
 
-    filename = "../data/output/tmy/{}".format(tmy_filename)
+    filename = "data/output/tmy/{}".format(tmy_filename)
     with open(filename, "r") as tmy_file:
         f_lat = float(tmy_file.readline().split(":")[1].strip())
         f_long = float(tmy_file.readline().split(":")[1].strip())
@@ -644,7 +644,7 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
     }
 
 
-TEST_MODE = True
+TEST_MODE = False
 TEST_FILES = [
     "01001000000_Alegría-Dulantzi.csv",
 ]
@@ -653,7 +653,7 @@ if __name__ == "__main__":
 
     print("Cargando datos de municipios...")
     df = pd.read_csv(
-        "../data/output/Municipios.csv",
+        "data/output/Municipios.csv",
         dtype={
             "COD_INE": str,
             "COD_PROV": str,
@@ -674,7 +674,7 @@ if __name__ == "__main__":
     df["ZCI_CTE_2019"] = df.apply(lambda x: x["ZC_CTE_2019"][0], 1)
     df["ZCV_CTE_2019"] = df.apply(lambda x: int(x["ZC_CTE_2019"][1]), 1)
 
-    # Calcula indicadores a partir de archivos TMY en ../data/output/tmy
+    # Calcula indicadores a partir de archivos TMY en data/output/tmy
     print("Calculando indicadores TMY...")
     with mp.Pool() as pool:
         values = [
@@ -698,5 +698,5 @@ if __name__ == "__main__":
     )
     df["ZCV_DIFF"] = df["ZCV_TMY"] - df["ZCV_CTE_2019"]
 
-    df.to_csv("../data/output/Results.csv", index=False)
+    df.to_csv("data/output/Results.csv", index=False)
     print("Indicadores de {} municipios calculados".format(len(df)))
