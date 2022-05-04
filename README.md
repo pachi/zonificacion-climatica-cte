@@ -1,30 +1,26 @@
-# zonificacion-climatica-cte
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/curso-reproducibilidad-team4/zonificacion-climatica-cte/HEAD)
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary><h2 style="display: inline-block">Contenidos</h2></summary>
-  <ol>
-    <li>
-      <a href="#sobre-el-proyecto">Sobre el proyecto</a>
-      <ul>
-      </ul>
-    </li>
-    <li>
-      <a href="#cómo-usar-este-flujo-de-trabajo">Cómo usar este flujo de trabajo</a>
-      <ul>
-        <li><a href="#creando-un-conda-environment">Creando un conda-environment</a></li>
-        <li><a href="#con-snakemake">Con snakemake</a></li>
-      </ul>
-      <li>
-        <a href="#resultados-que-podemos-obtener">Resultados que podemos obtener</a>
-      </li>
-    </li>
-  </ol>
-</details>
+# Zonificación climática del CTE
 
-## Sobre este proyecto
+- [Zonificación climática del CTE](#zonificación-climática-del-cte)
+  - [Acerca de este proyecto](#acerca-de-este-proyecto)
+    - [Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación](#zonificación-climática-localidades-españolas-según-severidades-del-código-técnico-de-la-edificación)
+    - [Propuesta](#propuesta)
+  - [Cómo usar este flujo de trabajo](#cómo-usar-este-flujo-de-trabajo)
+    - [Opción 1. Mediante un entorno de conda](#opción-1-mediante-un-entorno-de-conda)
+    - [Opción 2. Mediante Snakemake](#opción-2-mediante-snakemake)
+    - [Opción 3. Mediante Binder](#opción-3-mediante-binder)
+  - [Herramientas](#herramientas)
+  - [Información de los datos y el proceso](#información-de-los-datos-y-el-proceso)
+    - [Fuentes de datos](#fuentes-de-datos)
+    - [Software necesario](#software-necesario)
+    - [Pasos a ejecutar](#pasos-a-ejecutar)
+    - [Resultados](#resultados)
+  - [Proceso de análisis](#proceso-de-análisis)
 
-<b> Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación </b>
+## Acerca de este proyecto
+
+### Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación
 
 El _Código Técnico de la Edificación (CTE)_ permite asignar a cada localidad una zona climática, que se obtiene a partir de su capital de provincia y la altitud sobre el nivel del mar.
 
@@ -32,63 +28,93 @@ Las [tablas del Anejo B](https://www.codigotecnico.org/pdf/Documentos/HE/DccHE.p
 
 Esta zonificación climática está vinculada a las exigencias reglamentarias de eficiencia energética de los edificios, especificadas en el _CTE DB-HE_, pero también se utilizan para cuantificar el bono social térmico, etc.
 
+### Propuesta
+
+Con la disponibilidad de datos de satélite más precisos para cualquier punto georeferenciado, se plantea el ejercicio de obtener con esa información la zonificación climática y comparar los resultados con la zonificación actualmente existente del CTE DB-HE 2019.
+
+Este análisis se propone como un caso de ciencia reproducible.
+
 ## Cómo usar este flujo de trabajo
+
+Para reproducir el análisis realizado debe seguir el siguiente flujo de trabajo:
 
 1. Clonar el repositorio
 
-```git clone https://github.com/curso-reproducibilidad-team4/zonificacion-climatica-cte.git```
+```shell
+  git clone https://github.com/curso-reproducibilidad-team4/zonificacion-climatica-cte.git
+```
 
-2. Entrar al directorio
+2. Acceder al directorio
 
-```cd zonificacion-climatica-cte.git```
+```shell
+  cd zonificacion-climatica-cte
+```
 
-3. Damos permisos de ejecución
+3. Asignar permisos de ejecución para los scripts
 
-```chmod -R +x .```
+```shell
+  chmod -R +x ./src
+```
 
-### Creando un conda-environment
+### Opción 1. Mediante un entorno de conda
 
-Si no tienes conda, puedes ver cómo instalártelo [aquí](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+Si no tienes _conda_, puedes ver cómo instalártelo [aquí](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
 4a. Generamos un entorno de conda
 
-```conda env create -f environment.yaml```
+```shell
+conda env create -f environment.yaml
+```
 
 5a. Activamos el entorno
 
-```conda activate zonificacion-climatica-env```
+```shell
+conda activate zonificacion-climatica-env
+```
 
 6a. Ejecutamos los scripts en el siguiente orden:
 
 - Generación de los datos para la descarga de archivos climáticos:
 
-  ```python3 src/select_input.py```
-  
+  ```shell
+    python3 src/select_input.py
+  ```
+
 - Descarga de archivos climáticos:
 
-  ```python3 src/download_TMY.py```
- 
+  ```shell
+  python3 src/download_TMY.py
+  ```
+
 - Cálculo de indicadores:
 
-  ```python3 src/compute_indicators.py```
-  
+  ```shell
+  python3 src/compute_indicators.py
+  ```
+
 - Representación gráfica:
 
-  ```python3 src/plot_results.py```
+  ```shell
+  python3 src/plot_results.py
+  ```
 
-### Con snakemake
+### Opción 2. Mediante Snakemake
 
-...
+Para la instalación de [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html#) consulte su [documentación](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
 
-## Propuesta
+```shell
+  snakemake -c1
+```
 
-Puesto que ahora disponemos de datos de satélite más precisos y para cualquier punto georeferenciado, se plantea el ejercicio de obtener la zonificación climática a partir de esa información y hacer un análisis comparativo con la zonificación existente del CTE DB-HE.
+### Opción 3. Mediante Binder
 
-Realizar la propuesta mediante criterios de ciencia reproducible.
+Puede ejecutar el análisis de este proyecto usando [Binder](https://mybinder.org)
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/curso-reproducibilidad-team4/zonificacion-climatica-cte/HEAD)
 
 ## Herramientas
 
-- Python para el tratamiento previo de datos
+- [Python](https://www.python.org) para el tratamiento previo de datos
 
 ## Información de los datos y el proceso
 
@@ -96,9 +122,9 @@ Realizar la propuesta mediante criterios de ciencia reproducible.
 
 Municipios y geolocalizción:
 
-- Fuente: Nomenclator oficial del Centro Nacional de Información Geográfica (CNIG):
-  - https://datos.gob.es/gl/catalogo/e00125901-spaignngbe
-  - http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=NGMEN
+- Fuente:
+  - [Nomenclator oficial del Centro Nacional de Información Geográfica (CNIG)](https://datos.gob.es/gl/catalogo/e00125901-spaignngbe)
+  - [Centro de descargas](http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=NGMEN)
 - Licencia: Compatible CC BY 4.0
 - Formato: archivo de datos separados por comas .csv
 - Ruta en el repositorio: `datos/ign/MUNICIPIOS.csv`
@@ -110,7 +136,7 @@ Información climática
   - Descarga a través de API para obtener TMY:
     - [API Support page](https://joint-research-centre.ec.europa.eu/pvgis-photovoltaic-geographical-information-system/getting-started-pvgis/api-non-interactive-service_en)
     - Estructura de URL: `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
-- Licencia: CC BY 4.0 (https://ec.europa.eu/info/legal-notice_en)
+- Licencia: CC BY 4.0. [Notal legal EU](https://ec.europa.eu/info/legal-notice_en)
 - Formato: Año meteorológico tipo (TMY) en formato .csv
 - Ruta de descarga en el repositorio: `datos/output/tmy
 
@@ -126,8 +152,6 @@ Dependencias relevantes de Python:
 - `requests`
 
 ### Pasos a ejecutar
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/curso-reproducibilidad-team4/zonificacion-climatica-cte/HEAD)
 
 - Definición de la secuencia de tareas
 
