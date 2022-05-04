@@ -524,7 +524,6 @@ def winter_total_duration_of_days(latitude):
         day_duration_N(np.arange(1.0, 151.0, 1.0)).sum()
         + day_duration_N(np.arange(274.0, 366.0, 1.0)).sum()
     )
-    print("N: ", N)
 
     return N
 
