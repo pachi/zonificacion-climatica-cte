@@ -55,6 +55,8 @@ Dependencias relevantes de Python:
 
 ### Pasos a ejecutar
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/curso-reproducibilidad-team4/zonificacion-climatica-cte/HEAD)
+
 - Definición de la secuencia de tareas
 
   1. Generación de los datos para la descarga de archivos climáticos:
