@@ -10,6 +10,7 @@ datos `data/output/Municipios.csv` que contendría:
 - COD_PROV
 - PROVINCIA
 - NOMBRE_ACTUAL
+- POBLACION_MUNI
 - LONGITUD_ETRS89
 - LATITUD_ETRS89
 - ALTITUD
@@ -75,6 +76,7 @@ if __name__ == "__main__":
             "COD_PROV",
             "PROVINCIA",
             "NOMBRE_ACTUAL",
+            "POBLACION_MUNI",
             "LONGITUD_ETRS89",
             "LATITUD_ETRS89",
             "ALTITUD",
