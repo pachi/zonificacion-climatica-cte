@@ -104,6 +104,8 @@ Dependencias relevantes de Python:
 - numpy == 1.19
 - pandas == 1.2
 - requests == 2.25
+- jupyter_core == 4.9.2
+- nbformat == 5.3.0
 ```
 
 ## Fuentes de datos
