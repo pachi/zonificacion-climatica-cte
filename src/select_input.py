@@ -27,7 +27,6 @@ de modo que deben ser corregidas para descargar los datos:
 - 27066000000_Viveiro.csv, -7.5973072639999994,43.66074911 -> -7.595, 43.662
 """
 
-from tabnanny import verbose
 import pandas as pd
 import os
 
