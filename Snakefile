@@ -1,10 +1,13 @@
 configfile: "config.yaml"
 
+rule all:
+    input: "data/output/plots/histo.png"
+
 rule plot:
     input: 
         "data/output/Results.csv"
     output:
-        "data/output/histo.png"
+        "data/output/plots/histo.png"
     script: 
         "src/plot_results.py"
 
@@ -20,14 +23,14 @@ rule download_data:
     input: 
         "data/output/Municipios.csv"
     output:
-        "data/output/tmy/*.csv"
+        "data/output/tmy/{dataset}.csv"
     script:
         "src/download_TMY.py"
 
 rule compute_indicators:
     input:
         "data/output/Municipios.csv"
-        "data/output/tmy/*.csv"
+        "data/output/tmy/{dataset}.csv"
     output:
         "data/output/Results.csv"
     script: 
