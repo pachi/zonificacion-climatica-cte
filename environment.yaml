@@ -2,9 +2,11 @@ name: "zonificacion-climatica-cte"
 
 channels:
   - defaults
+  - bioconda
   - conda-forge
 
 dependencies:
+  - snakemake-minimal
   - pygraphviz
   - numpy == 1.19.5
   - pandas == 1.2.4
