@@ -5,15 +5,16 @@
   <summary><h2 style="display: inline-block">Contenidos</h2></summary>
   <ol>
     <li>
-      <a href="#sobre-el-proyecto">Sobre el proyecto</a>
+      <a href="#sobre-este-proyecto">Sobre este proyecto</a>
       <ul>
       </ul>
     </li>
     <li>
-      <a href="#cómo-usar-este-flujo-de-trabajo">Cómo usar este flujo de trabajo</a>
+      <a href="#cómo-replicar-el-flujo-de-trabajo">Cómo replicar el flujo de trabajo</a>
       <ul>
         <li><a href="#creando-un-conda-environment">Creando un conda-environment</a></li>
         <li><a href="#con-snakemake">Con snakemake</a></li>
+        <li><a href="#con-binder">Con binder</a></li>
       </ul>
       <li>
         <a href="#resultados-que-podemos-obtener">Resultados que podemos obtener</a>
@@ -24,7 +25,9 @@
 
 ## Sobre este proyecto
 
-<b> Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación </b>
+<p align="center">
+  <b> Actualización de la zonificación climática de localidades españolas según severidades del Código Técnico de la Edificación </b>
+</p>
 
 El _Código Técnico de la Edificación (CTE)_ permite asignar a cada localidad una zona climática, que se obtiene a partir de su capital de provincia y la altitud sobre el nivel del mar.
 
@@ -32,53 +35,76 @@ Las [tablas del Anejo B](https://www.codigotecnico.org/pdf/Documentos/HE/DccHE.p
 
 Esta zonificación climática está vinculada a las exigencias reglamentarias de eficiencia energética de los edificios, especificadas en el _CTE DB-HE_, pero también se utilizan para cuantificar el bono social térmico, etc.
 
-## Cómo usar este flujo de trabajo
+## Cómo replicar el flujo de trabajo
+
+- Si quieres hacerlo en tu máquina local: ejecuta desde el 1 al 3 y luego elige entre hacerlo con [conda](#creando-un-conda-environment) o con [snakemake](#con-snakemake) 
+- También puedes ejecutarlo directamente con [binder](#con-binder)
 
 1. Clonar el repositorio
 
-```git clone https://github.com/curso-reproducibilidad-team4/zonificacion-climatica-cte.git```
+  ```git clone https://github.com/curso-reproducibilidad-team4/zonificacion-climatica-cte.git```
 
 2. Entrar al directorio
 
-```cd zonificacion-climatica-cte.git```
+  ```cd zonificacion-climatica-cte.git```
 
 3. Damos permisos de ejecución
 
-```chmod -R +x .```
+  ```chmod -R +x .```
 
 ### Creando un conda-environment
 
 Si no tienes conda, puedes ver cómo instalártelo [aquí](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
-4a. Generamos un entorno de conda
+  4a. Generamos un entorno de conda
 
-```conda env create -f environment.yaml```
+  ```conda env create -f environment.yaml```
 
-5a. Activamos el entorno
+  5a. Activamos el entorno
 
-```conda activate zonificacion-climatica-env```
+  ```conda activate zonificacion-climatica-env```
 
-6a. Ejecutamos los scripts en el siguiente orden:
+  6a. Ejecutamos los scripts en el siguiente orden:
 
-- Generación de los datos para la descarga de archivos climáticos:
+  - Generación de los datos para la descarga de archivos climáticos:
 
-  ```python3 src/select_input.py```
+      ```python3 src/select_input.py```
   
-- Descarga de archivos climáticos:
+  - Descarga de archivos climáticos:
 
-  ```python3 src/download_TMY.py```
+     ```python3 src/download_TMY.py```
  
-- Cálculo de indicadores:
+  - Cálculo de indicadores:
 
-  ```python3 src/compute_indicators.py```
+      ```python3 src/compute_indicators.py```
   
-- Representación gráfica:
+  - Representación gráfica:
 
-  ```python3 src/plot_results.py```
+      ```python3 src/plot_results.py```
 
 ### Con snakemake
 
 ...
+
+### Con binder
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/curso-reproducibilidad-team4/zonificacion-climatica-cte/HEAD)
+
+  1c. Generación de los datos para la descarga de archivos climáticos:
+
+     `python3 src/select_input.py`
+
+  2c. Descarga de archivos climáticos (8130)
+
+     `python3 src/download_TMY.py`
+
+  3c. Cálculo de indicadores
+
+     `python3 src/compute_indicators.py`
+
+  4c. Representación gráfica
+
+     `python3 src/plot_results.py`
 
 ## Propuesta
 
