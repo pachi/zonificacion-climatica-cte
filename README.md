@@ -1,6 +1,30 @@
 # zonificacion-climatica-cte
 
-## Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary><h2 style="display: inline-block">Contenidos</h2></summary>
+  <ol>
+    <li>
+      <a href="#sobre-el-proyecto">Sobre el proyecto</a>
+      <ul>
+      </ul>
+    </li>
+    <li>
+      <a href="#cómo-usar-este-flujo-de-trabajo">Cómo usar este flujo de trabajo</a>
+      <ul>
+        <li><a href="#creando-un-conda-environment">Creando un conda-environment</a></li>
+        <li><a href="#con-snakemake">Con snakemake</a></li>
+      </ul>
+      <li>
+        <a href="#resultados-que-podemos-obtener">Resultados que podemos obtener</a>
+      </li>
+    </li>
+  </ol>
+</details>
+
+## Sobre este proyecto
+
+<b> Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación </b>
 
 El _Código Técnico de la Edificación (CTE)_ permite asignar a cada localidad una zona climática, que se obtiene a partir de su capital de provincia y la altitud sobre el nivel del mar.
 
