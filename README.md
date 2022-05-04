@@ -6,14 +6,12 @@
   - [Acerca de este proyecto](#acerca-de-este-proyecto)
     - [Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación](#zonificación-climática-localidades-españolas-según-severidades-del-código-técnico-de-la-edificación)
     - [Propuesta](#propuesta)
-  - [Cómo usar este flujo de trabajo](#cómo-usar-este-flujo-de-trabajo)
+  - [Cómo replicar el flujo de trabajo](#cómo-replicar-el-flujo-de-trabajo)
     - [Opción 1. Mediante un entorno de conda](#opción-1-mediante-un-entorno-de-conda)
     - [Opción 2. Mediante Snakemake](#opción-2-mediante-snakemake)
     - [Opción 3. Mediante Binder](#opción-3-mediante-binder)
-  - [Herramientas](#herramientas)
-  - [Información de los datos y el proceso](#información-de-los-datos-y-el-proceso)
-    - [Fuentes de datos](#fuentes-de-datos)
-    - [Software necesario](#software-necesario)
+  - [Software necesario](#software-necesario)
+  - [Fuentes de datos](#fuentes-de-datos)
     - [Pasos a ejecutar](#pasos-a-ejecutar)
     - [Resultados](#resultados)
   - [Proceso de análisis](#proceso-de-análisis)
@@ -34,7 +32,10 @@ Con la disponibilidad de datos de satélite más precisos para cualquier punto g
 
 Este análisis se propone como un caso de ciencia reproducible.
 
-## Cómo usar este flujo de trabajo
+## Cómo replicar el flujo de trabajo
+
+- Si quieres hacerlo en tu máquina local: ejecuta desde el 1 al 3 y luego elige entre hacerlo con [conda](#creando-un-conda-environment) o con [snakemake](#con-snakemake)
+- También puedes ejecutarlo directamente con [binder](#con-binder)
 
 Para reproducir el análisis realizado debe seguir el siguiente flujo de trabajo:
 
@@ -44,7 +45,7 @@ Para reproducir el análisis realizado debe seguir el siguiente flujo de trabajo
   git clone https://github.com/curso-reproducibilidad-team4/zonificacion-climatica-cte.git
 ```
 
-2. Acceder al directorio
+1. Acceder al directorio
 
 ```shell
   cd zonificacion-climatica-cte
@@ -72,31 +73,7 @@ conda env create -f environment.yaml
 conda activate zonificacion-climatica-env
 ```
 
-6a. Ejecutamos los scripts en el siguiente orden:
-
-- Generación de los datos para la descarga de archivos climáticos:
-
-  ```shell
-    python3 src/select_input.py
-  ```
-
-- Descarga de archivos climáticos:
-
-  ```shell
-  python3 src/download_TMY.py
-  ```
-
-- Cálculo de indicadores:
-
-  ```shell
-  python3 src/compute_indicators.py
-  ```
-
-- Representación gráfica:
-
-  ```shell
-  python3 src/plot_results.py
-  ```
+6a. Ejecutamos los scripts del apartado [Pasos a ejecutar](#pasos-a-ejecutar)
 
 ### Opción 2. Mediante Snakemake
 
@@ -112,13 +89,20 @@ Puede ejecutar el análisis de este proyecto usando [Binder](https://mybinder.or
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/curso-reproducibilidad-team4/zonificacion-climatica-cte/HEAD)
 
-## Herramientas
+1. Siga en una consola los pasos del apartado [Pasos a ejecutar](#pasos-a-ejecutar)
 
-- [Python](https://www.python.org) para el tratamiento previo de datos
+## Software necesario
 
-## Información de los datos y el proceso
+[Python](https://www.python.org) para el tratamiento previo de datos
 
-### Fuentes de datos
+- `Python verisón 3`
+
+Dependencias relevantes de Python:
+
+- `pandas == 1.2`
+- `requests == 2.25`
+
+## Fuentes de datos
 
 Municipios y geolocalizción:
 
@@ -139,17 +123,6 @@ Información climática
 - Licencia: CC BY 4.0. [Notal legal EU](https://ec.europa.eu/info/legal-notice_en)
 - Formato: Año meteorológico tipo (TMY) en formato .csv
 - Ruta de descarga en el repositorio: `datos/output/tmy
-
-### Software necesario
-
-Programas necesarios y versiones:
-
-- `Python 3`
-
-Dependencias relevantes de Python:
-
-- `pandas`
-- `requests`
 
 ### Pasos a ejecutar
 
