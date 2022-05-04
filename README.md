@@ -96,12 +96,15 @@ Puede ejecutar el análisis de este proyecto usando [Binder](https://mybinder.or
 
 [Python](https://www.python.org) para el tratamiento previo de datos
 
-- `Python verisón 3`
+- `Python versión 3`
 
 Dependencias relevantes de Python:
 
-- `pandas == 1.2`
-- `requests == 2.25`
+```yaml
+- numpy == 1.19
+- pandas == 1.2
+- requests == 2.25
+```
 
 ## Fuentes de datos
 
