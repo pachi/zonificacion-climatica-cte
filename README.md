@@ -8,6 +8,54 @@ Las [tablas del Anejo B](https://www.codigotecnico.org/pdf/Documentos/HE/DccHE.p
 
 Esta zonificación climática está vinculada a las exigencias reglamentarias de eficiencia energética de los edificios, especificadas en el _CTE DB-HE_, pero también se utilizan para cuantificar el bono social térmico, etc.
 
+## Cómo usar este flujo de trabajo
+
+1. Clonar el repositorio
+
+```git clone https://github.com/curso-reproducibilidad-team4/zonificacion-climatica-cte.git```
+
+2. Entrar al directorio
+
+```cd zonificacion-climatica-cte.git```
+
+3. Damos permisos de ejecución
+
+```chmod -R +x .```
+
+### Creando un conda-environment
+
+Si no tienes conda, puedes ver cómo instalártelo [aquí](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+
+4a. Generamos un entorno de conda
+
+```conda env create -f environment.yaml```
+
+5a. Activamos el entorno
+
+```conda activate zonificacion-climatica-env```
+
+6a. Ejecutamos los scripts en el siguiente orden:
+
+- Generación de los datos para la descarga de archivos climáticos:
+
+  ```python3 src/select_input.py```
+  
+- Descarga de archivos climáticos:
+
+  ```python3 src/download_TMY.py```
+ 
+- Cálculo de indicadores:
+
+  ```python3 src/compute_indicators.py```
+  
+- Representación gráfica:
+
+  ```python3 src/plot_results.py```
+
+### Con snakemake
+
+...
+
 ## Propuesta
 
 Puesto que ahora disponemos de datos de satélite más precisos y para cualquier punto georeferenciado, se plantea el ejercicio de obtener la zonificación climática a partir de esa información y hacer un análisis comparativo con la zonificación existente del CTE DB-HE.
