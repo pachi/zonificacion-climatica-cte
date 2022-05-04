@@ -146,7 +146,7 @@ Información climática
 
   4. Representación gráfica
 
-     `python3 src/plot_results.py`
+     `jupyter nbconvert --to notebook --execute --allow-errors notebooks/graficas.ipynb`
 
 ### Resultados
 
