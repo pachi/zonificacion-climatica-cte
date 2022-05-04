@@ -55,7 +55,6 @@ Dependencias relevantes de Python:
 
 ### Pasos a ejecutar
 
-- Comandos concretos
 - Definición de la secuencia de tareas
 
   1. Generación de los datos para la descarga de archivos climáticos:
