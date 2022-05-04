@@ -5,12 +5,12 @@
   <summary><h2 style="display: inline-block">Contenidos</h2></summary>
   <ol>
     <li>
-      <a href="#sobre-el-proyecto">Sobre el proyecto</a>
+      <a href="#sobre-este-proyecto">Sobre este proyecto</a>
       <ul>
       </ul>
     </li>
     <li>
-      <a href="#cómo-usar-este-flujo-de-trabajo">Cómo usar este flujo de trabajo</a>
+      <a href="#cómo-replicar-el-flujo-de-trabajo">Cómo replicar el flujo de trabajo</a>
       <ul>
         <li><a href="#creando-un-conda-environment">Creando un conda-environment</a></li>
         <li><a href="#con-snakemake">Con snakemake</a></li>
@@ -25,7 +25,9 @@
 
 ## Sobre este proyecto
 
-<b> Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación </b>
+<p align="center">
+  <b> Actualización de la zonificación climática de localidades españolas según severidades del Código Técnico de la Edificación </b>
+</p>
 
 El _Código Técnico de la Edificación (CTE)_ permite asignar a cada localidad una zona climática, que se obtiene a partir de su capital de provincia y la altitud sobre el nivel del mar.
 
@@ -33,7 +35,7 @@ Las [tablas del Anejo B](https://www.codigotecnico.org/pdf/Documentos/HE/DccHE.p
 
 Esta zonificación climática está vinculada a las exigencias reglamentarias de eficiencia energética de los edificios, especificadas en el _CTE DB-HE_, pero también se utilizan para cuantificar el bono social térmico, etc.
 
-## Cómo usar este flujo de trabajo
+## Cómo replicar el flujo de trabajo
 
 - Si quieres hacerlo en tu máquina local: ejecuta desde el 1 al 3 y luego elige entre hacerlo con [conda](#creando-un-conda-environment) o con [snakemake](#con-snakemake) 
 - También puedes ejecutarlo directamente con [binder](#con-binder)
