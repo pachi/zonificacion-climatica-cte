@@ -1,12 +1,12 @@
 conda: "environment.yaml"
 
-rule all:
-    input: "data/output/plots/histo.png"
-
 rule plot:
     input: "data/output/Results.csv"
-    output: "data/output/plots/histo.png"
-    script: "src/plot_results.py"
+    output:
+        "data/output/plots/zci-diff-hist.png",
+        "data/output/plots/zcv-diff-hist.png",
+        "data/output/plots/zc-tmy.png",
+    notebook: "notebooks/graficas.ipynb"
 
 rule select_input:
     input: "data/ign/MUNICIPIOS.csv"
