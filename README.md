@@ -34,6 +34,9 @@ Esta zonificación climática está vinculada a las exigencias reglamentarias de
 
 ## Cómo usar este flujo de trabajo
 
+- Si quieres hacerlo en tu máquina local: ejecuta desde el 1 al 3 y luego elige entre hacerlo con [conda](#creando-un-conda-environment) o con [snakemake](#con-snakemake) 
+- También puedes ejecutarlo directamente con [binder](#con-binder)
+
 1. Clonar el repositorio
 
 ```git clone https://github.com/curso-reproducibilidad-team4/zonificacion-climatica-cte.git```
@@ -79,6 +82,8 @@ Si no tienes conda, puedes ver cómo instalártelo [aquí](https://docs.conda.io
 ### Con snakemake
 
 ...
+
+### Con binder
 
 ## Propuesta
 
