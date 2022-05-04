@@ -15,10 +15,10 @@ rule select_input:
 
 rule download_data:
     input: "data/output/Municipios.csv"
-    output: "data/output/tmy/{dataset}.csv"
-    script: "src/download_TMY.py"
+    output: "data/output/downloads_done.txt"
+    shell: "python3 src/download_TMY.py && touch data/output/downloads_done.txt"
 
 rule compute_indicators:
-    input: "data/output/Municipios.csv", "data/output/tmy/{dataset}.csv"
+    input: "data/output/Municipios.csv", "data/output/downloads_done.txt"
     output: "data/output/Results.csv"
     script: "src/compute_indicators.py"
