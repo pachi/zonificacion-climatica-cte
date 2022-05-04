@@ -551,10 +551,10 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
         if (
             f_lat != round(lat, 3)
             or f_long != round(long, 3)
-            or f_elev != round(alt, 1)
+            or abs(f_elev - round(alt, 1) > 30)
         ):
-            print(
-                "AVISO: '{}' diferencias en (lat, long, alt) de archivo ({}, {}, {}) y del nomenclator ({}, {}, {})".format(
+            # TODO: Guardar en archivo de log
+            msg = "AVISO: '{}' diferencias en (lat, long, alt) de archivo ({}, {}, {}) y del nomenclator ({}, {}, {})".format(
                     tmy_filename,
                     f_lat,
                     f_long,
@@ -563,7 +563,7 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
                     round(long, 3),
                     round(alt, 1),
                 )
-            )
+            print(msg)
         df = pd.read_csv(
             tmy_file,
             sep=",",
