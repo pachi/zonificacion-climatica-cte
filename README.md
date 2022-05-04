@@ -14,35 +14,6 @@ Puesto que ahora disponemos de datos de satélite más precisos y para cualquier
 
 Realizar la propuesta mediante criterios de ciencia reproducible.
 
-## Proceso de análisis
-
-- Obtención de datos:
-  - Latitud y longitud de municipios a partir del nomenclator oficial del Centro Nacional de Información Geográfica (CNIG):
-    - https://datos.gob.es/gl/catalogo/e00125901-spaignngbe
-    - http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=NGMEN
-  - Información climática (radiación y temperatura)
-    - Año meteorológico tipo (TMY):
-    - [PV-GIS (JRC)](https://re.jrc.ec.europa.eu/pvg_tools/en/)
-    - API para obtener TMY:
-      - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
-      - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=json&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
-- Cálculo de indicadores
-  - índices de severidad climática de invierno (SCI) y verano (SCV)
-  - zonas climáticas de invierno (ZCI, una letra) y verano (ZCV, un número), a partir de SCI y SCV
-  - zona climática ZC (letra de ZCI y número de ZCV)
-    - Depende de GD y n/N: [Documento de apoyo de climas](https://www.codigotecnico.org/pdf/Documentos/HE/20170202-DOC-DB-HE-0-Climas%20de%20referencia.pdf)
-      - S.A. Kalogirou, Solar energy engineering: processes and systems (2nd ed.), Elsevier Inc. (2014)
-      - n (duration of sunshine) - horas en las que la radiación directa (beam solar irradiance) > 120 W/m² (World Meteorological Organization)
-      - N (número teórico máximo de horas de luz) - duración del día (en horas) = 2/15. cos^-1(-tan(L)tan(delta)), L=latitud, delta = declinación (grados) = 23.45.sin(360/365(284 + día_del_año)))
-    - GD: Grados día (cálculo de datos horarios):
-      - <img src="https://render.githubusercontent.com/render/math?math=GD_{T_b} = \sum {{T_b - T_{ah}} \over 24} \cdot \left\lfloor T_b > T_{ah} \right\rfloor">
-        <!-- GD_Tb = Sum( ((Tb - Tah) / 24) si Tb > Tah, o 0 si Tb <= Tah). -->
-- Representación de resultados
-  - Mapa ZCI
-  - Mapa ZCV
-  - Mapa de diferencias entre ZCI calculada y de las tablas CTE DB-HE
-  - Mapa de diferencias entre ZCV calculada y de las tablas CTE DB-HE
-
 ## Herramientas
 
 - Python para el tratamiento previo de datos
@@ -115,3 +86,32 @@ Dependencias relevantes de Python:
   - `data/output/plots/*.png`
 - Descripción de los resultados y conclusiones
   - `...TODO`
+
+## Proceso de análisis
+
+- Obtención de datos:
+  - Latitud y longitud de municipios a partir del nomenclator oficial del Centro Nacional de Información Geográfica (CNIG):
+    - https://datos.gob.es/gl/catalogo/e00125901-spaignngbe
+    - http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=NGMEN
+  - Información climática (radiación y temperatura)
+    - Año meteorológico tipo (TMY):
+    - [PV-GIS (JRC)](https://re.jrc.ec.europa.eu/pvg_tools/en/)
+    - API para obtener TMY:
+      - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=csv&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
+      - `https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat=40.409&lon=-3.724&usehorizon=1&browser=1&outputformat=json&startyear=2005&endyear=2020&userhorizon=&js=1&period=1`
+- Cálculo de indicadores
+  - índices de severidad climática de invierno (SCI) y verano (SCV)
+  - zonas climáticas de invierno (ZCI, una letra) y verano (ZCV, un número), a partir de SCI y SCV
+  - zona climática ZC (letra de ZCI y número de ZCV)
+    - Depende de GD y n/N: [Documento de apoyo de climas](https://www.codigotecnico.org/pdf/Documentos/HE/20170202-DOC-DB-HE-0-Climas%20de%20referencia.pdf)
+      - S.A. Kalogirou, Solar energy engineering: processes and systems (2nd ed.), Elsevier Inc. (2014)
+      - n (duration of sunshine) - horas en las que la radiación directa (beam solar irradiance) > 120 W/m² (World Meteorological Organization)
+      - N (número teórico máximo de horas de luz) - duración del día (en horas) = 2/15. cos^-1(-tan(L)tan(delta)), L=latitud, delta = declinación (grados) = 23.45.sin(360/365(284 + día_del_año)))
+    - GD: Grados día (cálculo de datos horarios):
+      - <img src="https://render.githubusercontent.com/render/math?math=GD_{T_b} = \sum {{T_b - T_{ah}} \over 24} \cdot \left\lfloor T_b > T_{ah} \right\rfloor">
+        <!-- GD_Tb = Sum( ((Tb - Tah) / 24) si Tb > Tah, o 0 si Tb <= Tah). -->
+- Representación de resultados
+  - Mapa ZCI
+  - Mapa ZCV
+  - Mapa de diferencias entre ZCI calculada y de las tablas CTE DB-HE
+  - Mapa de diferencias entre ZCV calculada y de las tablas CTE DB-HE
