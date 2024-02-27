@@ -21,14 +21,13 @@ TIME_SLEEP = 1.0 / 30.0 # Tiempo de espera entre llamadas a la API > 1/30s
 def write_url(lat, lon):
     """
     Compone la url
+    https://joint-research-centre.ec.europa.eu/photovoltaic-geographical-information-system-pvgis/getting-started-pvgis/api-non-interactive-service_en
 
     Args:
         lat (float) Latitud ETRS89 (en grados decimales).
         lon (float) Longitud ETRS89 (en grados decimales).
     """
-    url = "https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat={}&lon={}&outputformat=csv".\
-        format(str(lat), str(lon))
-    return url
+    return f"https://re.jrc.ec.europa.eu/api/v5_2/tmy?lat={lat}&lon={lon}&outputformat=csv&startyear=2005&endyear=2020"
 
 def write_tmy_file(lon, lat, tmy_file_name):
     """
