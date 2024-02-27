@@ -10,7 +10,7 @@ compute_indicators:
 	snakemake -c all -s ./Snakefile -d . -- compute_indicators
 
 plot:
-    jupyter nbconvert --to notebook --execute --allow-errors notebooks/graficas.ipynb
+	jupyter nbconvert --to notebook --execute --allow-errors notebooks/graficas.ipynb
 
 create_conda_envs:
 	conda env create -n zonificacion-climatica-cte -f envs/environment.yml
