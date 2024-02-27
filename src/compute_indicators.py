@@ -528,42 +528,12 @@ def winter_total_duration_of_days(latitude):
     return N
 
 
-def tmy_indicators(cod, long, lat, alt, tmy_filename):
-    """Calcula indicadores a partir de datos de archivo TMY"""
-    if TEST_MODE and tmy_filename not in TEST_FILES:
-        return {
-            "COD_INE": cod,
-            "GD": 0.0,
-            "GD_I": 0.0,
-            "GD_V": 0.0,
-            "n_N": 0.0,
-            "SCI": 0.0,
-            "SCV": 0.0,
-            "ZCI_TMY": "A",
-            "ZCV_TMY": 1,
-        }
-
-    filename = "data/output/tmy/{}".format(tmy_filename)
-    with open(filename, "r") as tmy_file:
+def read_tmy_data(tmy_filename):
+    """Lee datos de archivo o buffer TMY"""
+    with open(tmy_filename, "r") as tmy_file:
         f_lat = float(tmy_file.readline().split(":")[1].strip())
         f_long = float(tmy_file.readline().split(":")[1].strip())
         f_elev = float(tmy_file.readline().split(":")[1].strip())
-        if (
-            f_lat != round(lat, 3)
-            or f_long != round(long, 3)
-            or abs(f_elev - round(alt, 1) > 30)
-        ):
-            # TODO: Guardar en archivo de log
-            msg = "AVISO: '{}' diferencias en (lat, long, alt) de archivo ({}, {}, {}) y del nomenclator ({}, {}, {})".format(
-                    tmy_filename,
-                    f_lat,
-                    f_long,
-                    f_elev,
-                    round(lat, 3),
-                    round(long, 3),
-                    round(alt, 1),
-                )
-            print(msg)
         df = pd.read_csv(
             tmy_file,
             sep=",",
@@ -584,52 +554,95 @@ def tmy_indicators(cod, long, lat, alt, tmy_filename):
                 "SP": float,
             },
         )
+    return {"lat": f_lat, "long": f_long, "elev": f_elev, "data": df}
 
-        # Severidad y zona climática de invierno ========
-        # Se calcula con indicadores de los meses de octubre a mayo
-        # (dias 1 a 150 y de 274 a 365, horas 1 a 3600 y de 6552 a 8760)
-        # Grados día de invierno en base 20  (grados sobre 20 en cada día / 24)
-        # \sum {{T_b - T_{ah}} \over 24} \cdot \left\lfloor T_b > T_{ah} \right\rfloor
-        gd_inv_tot = (20.0 - df["T2m"]) / 24.0 * (20.0 > df["T2m"]).astype(int)
-        # GD_inv: grados día base 20, para los meses de octubre a mayo
-        gd_inv = round(gd_inv_tot[1:3600].sum() + gd_inv_tot[6552:8760].sum(), 1)
-        # n (duration of sunshine): horas con radiación directa (beam solar irradiance) > 120 W/m² (World Meteorological Organization)
-        n = float(
-            (df["Gb(n)"][1:3600] > 120.0).astype(int).sum()
-            + (df["Gb(n)"][6552:8760] > 120.0).astype(int).sum()
+
+def tmy_indicators(cod, long, lat, alt, tmy_filename):
+    """Calcula indicadores a partir de datos de archivo TMY"""
+    if TEST_MODE and tmy_filename not in TEST_FILES:
+        return {
+            "COD_INE": cod,
+            "GD": 0.0,
+            "GD_I": 0.0,
+            "GD_V": 0.0,
+            "n_N": 0.0,
+            "SCI": 0.0,
+            "SCV": 0.0,
+            "ZCI_TMY": "A",
+            "ZCV_TMY": 1,
+        }
+
+    filename = "data/output/tmy/{}".format(tmy_filename)
+    data = read_tmy_data(filename)
+
+    df = data["data"]
+    f_lat = data["lat"]
+    f_long = data["long"]
+    f_elev = data["elev"]
+
+    # Check básico de consistencia entre datos de BBDD y TMY
+    if (
+        f_lat != round(lat, 3)
+        or f_long != round(long, 3)
+        or abs(f_elev - round(alt, 1) > 30)
+    ):
+        # TODO: Guardar en archivo de log
+        msg = "AVISO: '{}' diferencias en (lat, long, alt) de archivo ({}, {}, {}) y del nomenclator ({}, {}, {})".format(
+            tmy_filename,
+            f_lat,
+            f_long,
+            f_elev,
+            round(lat, 3),
+            round(long, 3),
+            round(alt, 1),
         )
-        # N (número teórico máximo de horas de luz) en invierno, de octubre a mayo (ambos incluidos):
-        N = round(winter_total_duration_of_days(lat), 1)
-        # n/N: Horas de sol / duración del día, en los meses de octubre a mayo
-        n_N = round(float(n) / float(N), 3)
+        print(msg)
 
-        sci = round(
-            3.564e-4 * gd_inv
-            - 4.043e-1 * n_N
-            + 8.394e-8 * gd_inv * gd_inv
-            - 7.325e-2 * n_N * n_N
-            - 1.137e-1,
-            2,
-        )
-        zci = get_zci(sci)
+    # Severidad y zona climática de invierno ========
+    # Se calcula con indicadores de los meses de octubre a mayo
+    # (dias 1 a 150 y de 274 a 365, horas 1 a 3600 y de 6552 a 8760)
+    # Grados día de invierno en base 20  (grados sobre 20 en cada día / 24)
+    # \sum {{T_b - T_{ah}} \over 24} \cdot \left\lfloor T_b > T_{ah} \right\rfloor
+    gd_inv_tot = (20.0 - df["T2m"]) / 24.0 * (20.0 > df["T2m"]).astype(int)
+    # GD_inv: grados día base 20, para los meses de octubre a mayo
+    gd_inv = round(gd_inv_tot[1:3600].sum() + gd_inv_tot[6552:8760].sum(), 1)
+    # n (duration of sunshine): horas con radiación directa (beam solar irradiance) > 120 W/m² (World Meteorological Organization)
+    n = float(
+        (df["Gb(n)"][1:3600] > 120.0).astype(int).sum()
+        + (df["Gb(n)"][6552:8760] > 120.0).astype(int).sum()
+    )
+    # N (número teórico máximo de horas de luz) en invierno, de octubre a mayo (ambos incluidos):
+    N = round(winter_total_duration_of_days(lat), 1)
+    # n/N: Horas de sol / duración del día, en los meses de octubre a mayo
+    n_N = round(float(n) / float(N), 3)
 
-        # Severidad y zona climática de verano ========
-        # (día 151 a día 273, horas de 3601 a 6551)
-        # Grados día de verano en base 20 (grados sobre 20 en cada día / 24)
-        # \sum {{T_{ah} - T_b} \over 24} \cdot \left\lfloor T_b < T_{ah} \right\rfloor
-        gd_ver_tot = (df["T2m"] - 20.0) / 24.0 * (20.0 < df["T2m"]).astype(int)
+    sci = round(
+        3.564e-4 * gd_inv
+        - 4.043e-1 * n_N
+        + 8.394e-8 * gd_inv * gd_inv
+        - 7.325e-2 * n_N * n_N
+        - 1.137e-1,
+        2,
+    )
+    zci = get_zci(sci)
 
-        # GD_ver: grados día base 20, para los meses de junio a septiembre
-        gd_ver = round(gd_ver_tot[3601:6551].sum(), 1)
+    # Severidad y zona climática de verano ========
+    # (día 151 a día 273, horas de 3601 a 6551)
+    # Grados día de verano en base 20 (grados sobre 20 en cada día / 24)
+    # \sum {{T_{ah} - T_b} \over 24} \cdot \left\lfloor T_b < T_{ah} \right\rfloor
+    gd_ver_tot = (df["T2m"] - 20.0) / 24.0 * (20.0 < df["T2m"]).astype(int)
 
-        scv = round(2.990e-3 * gd_ver - 1.1597e-7 * gd_ver * gd_ver - 1.713e-1, 2)
-        zcv = get_zcv(scv)
+    # GD_ver: grados día base 20, para los meses de junio a septiembre
+    gd_ver = round(gd_ver_tot[3601:6551].sum(), 1)
 
-        if TEST_MODE:
-            print("\tGD_inv: ", gd_inv, ", GD_ver: ", gd_ver)
-            print("\tn: ", n, ", N: ", N, ", n/N: ", n_N)
-            print("\tSCI: ", sci, " SCV: ", scv)
-            print("\tZCI: ", zci, " ZCV: ", zcv)
+    scv = round(2.990e-3 * gd_ver - 1.1597e-7 * gd_ver * gd_ver - 1.713e-1, 2)
+    zcv = get_zcv(scv)
+
+    if TEST_MODE:
+        print("\tGD_inv: ", gd_inv, ", GD_ver: ", gd_ver)
+        print("\tn: ", n, ", N: ", N, ", n/N: ", n_N)
+        print("\tSCI: ", sci, " SCV: ", scv)
+        print("\tZCI: ", zci, " ZCV: ", zcv)
 
     return {
         "COD_INE": cod,
