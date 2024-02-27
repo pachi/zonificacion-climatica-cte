@@ -87,7 +87,7 @@ rule download_tmy_all:
 rule compute_indicators:
     input:
         "data/output/Municipios.csv",
-        "data/output/downloads.done",
+        "data/output/tmy/downloads.done",
     output:
         "data/output/Results.csv",
     conda:
