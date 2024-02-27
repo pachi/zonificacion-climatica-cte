@@ -8,12 +8,9 @@
     - [Zonificación climática localidades españolas según severidades del Código Técnico de la Edificación](#zonificación-climática-localidades-españolas-según-severidades-del-código-técnico-de-la-edificación)
     - [Propuesta](#propuesta)
   - [Cómo replicar el flujo de trabajo](#cómo-replicar-el-flujo-de-trabajo)
-    - [Opción 1. Mediante un entorno de conda](#opción-1-mediante-un-entorno-de-conda)
-    - [Opción 2. Mediante Snakemake](#opción-2-mediante-snakemake)
-    - [Opción 3. Mediante Binder](#opción-3-mediante-binder)
+    - [Flujo con Snakemake](#flujo-con-snakemake)
   - [Software necesario](#software-necesario)
   - [Fuentes de datos](#fuentes-de-datos)
-    - [Pasos a ejecutar](#pasos-a-ejecutar)
     - [Resultados](#resultados)
   - [Proceso de análisis](#proceso-de-análisis)
 
@@ -35,9 +32,6 @@ Este análisis se propone como un caso de ciencia reproducible.
 
 ## Cómo replicar el flujo de trabajo
 
-- Si quieres hacerlo en tu máquina local: ejecuta desde el 1 al 3 y luego elige entre hacerlo con [conda](#creando-un-conda-environment) o con [snakemake](#con-snakemake)
-- También puedes ejecutarlo directamente con [binder](#con-binder)
-
 Para reproducir el análisis realizado debe seguir el siguiente flujo de trabajo:
 
 1. Clonar el repositorio
@@ -46,7 +40,7 @@ Para reproducir el análisis realizado debe seguir el siguiente flujo de trabajo
   git clone https://github.com/curso-reproducibilidad-team4/zonificacion-climatica-cte.git
 ```
 
-1. Acceder al directorio
+2. Acceder al directorio
 
 ```shell
   cd zonificacion-climatica-cte
@@ -58,39 +52,13 @@ Para reproducir el análisis realizado debe seguir el siguiente flujo de trabajo
   chmod -R +x ./src
 ```
 
-### Opción 1. Mediante un entorno de conda
-
-Si no tienes _conda_, puedes ver cómo instalártelo [aquí](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
-
-4a. Generamos un entorno de conda
-
-```shell
-conda env create -f environment.yml
-```
-
-5a. Activamos el entorno
-
-```shell
-conda activate zonificacion-climatica-env
-```
-
-6a. Ejecutamos los scripts del apartado [Pasos a ejecutar](#pasos-a-ejecutar)
-
-### Opción 2. Mediante Snakemake
+### Flujo con Snakemake
 
 Para la instalación de [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html#) consulte su [documentación](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
 
 ```shell
-  snakemake -c1
+  snakemake -c all -s ./Snakefile -d . --max-jobs-per-second 29 -- all
 ```
-
-### Opción 3. Mediante Binder
-
-Puede ejecutar el análisis de este proyecto usando [Binder](https://mybinder.org)
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/curso-reproducibilidad-team4/zonificacion-climatica-cte/HEAD)
-
-1. Siga en una consola los pasos del apartado [Pasos a ejecutar](#pasos-a-ejecutar)
 
 ## Software necesario
 
@@ -129,26 +97,6 @@ Información climática
 - Licencia: CC BY 4.0. [Notal legal EU](https://ec.europa.eu/info/legal-notice_en)
 - Formato: Año meteorológico tipo (TMY) en formato .csv
 - Ruta de descarga en el repositorio: `datos/output/tmy
-
-### Pasos a ejecutar
-
-- Definición de la secuencia de tareas
-
-  1. Generación de los datos para la descarga de archivos climáticos:
-
-     `python3 src/select_input.py`
-
-  2. Descarga de archivos climáticos (8130)
-
-     `python3 src/download_TMY.py`
-
-  3. Cálculo de indicadores
-
-     `python3 src/compute_indicators.py`
-
-  4. Representación gráfica
-
-     `jupyter nbconvert --to notebook --execute --allow-errors notebooks/graficas.ipynb`
 
 ### Resultados
 
